@@ -1,0 +1,7 @@
+# MacOS Specific
+.DS_Store
+
+# Directories
+__py_cache__/
+build/
+nistpt.egg_info/
