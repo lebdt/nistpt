@@ -2,6 +2,6 @@
 .DS_Store
 
 # Directories
-__py_cache__/
+__pycache__/
 build/
-nistpt.egg_info/
+nistpt.egg-info/
