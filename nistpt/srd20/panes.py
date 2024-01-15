@@ -1,3 +1,4 @@
+from typing import Tuple
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -7,46 +8,44 @@ from tabulate import tabulate
 
 
 def compounds(
-    driver: WebDriver or None, compound: str, exact: bool = False
-) -> (str, dict):
+    driver: WebDriver, compound: str, exact: bool = False
+) -> Tuple[str, dict]:
     SRD20_PREFIX = "https://srdata.nist.gov/xps"
 
     current_page_driver = driver
     current_page_driver.implicitly_wait(2)
 
-    SELENIUM = 1
     COMPOUNDS_PATH = "/ChemicalName"
-    if SELENIUM == 1:
-        if driver.current_url != SRD20_PREFIX + COMPOUNDS_PATH:
-            current_page_driver.get(SRD20_PREFIX + COMPOUNDS_PATH)
+    if driver.current_url != SRD20_PREFIX + COMPOUNDS_PATH:
+        current_page_driver.get(SRD20_PREFIX + COMPOUNDS_PATH)
 
+    # sleep(1)
+
+    if (
+        current_page_driver.find_elements(
+            By.CLASS_NAME,
+            "rz-chkbox modified valid rz-state-empty".replace(" ", "."),
+        )
+        == []
+    ):
+        checkbox_active = True
+    else:
+        checkbox_active = False
+
+    if exact == (not checkbox_active):
         # sleep(1)
+        current_page_driver.find_elements(
+            By.CLASS_NAME, "rz-chkbox-box"
+        )[0].click()
 
-        if (
-            current_page_driver.find_elements(
-                By.CLASS_NAME,
-                "rz-chkbox modified valid rz-state-empty".replace(" ", "."),
-            )
-            == []
-        ):
-            checkbox_active = True
-        else:
-            checkbox_active = False
-
-        if exact == (not checkbox_active):
-            # sleep(1)
-            exact_checkbox = current_page_driver.find_elements(
-                By.CLASS_NAME, "rz-chkbox-box"
-            )[0].click()
-
-        search_box = current_page_driver.find_elements(
-            By.XPATH, "//*[contains(@class,'rz-textbox') and contains(@class, 'w-50')]"
-        )[0]
-        search_box.clear()
-        search_box.send_keys(compound)
-        search_box.send_keys(Keys.RETURN)
-        
-        results_table, header, url_dict = selenium_get_table(current_page_driver)
+    search_box = current_page_driver.find_elements(
+        By.XPATH, "//*[contains(@class,'rz-textbox') and contains(@class, 'w-50')]"
+    )[0]
+    search_box.clear()
+    search_box.send_keys(compound)
+    search_box.send_keys(Keys.RETURN)
+    
+    results_table, header, url_dict = selenium_get_table(current_page_driver)
 
     if results_table == []:
         return ("", {})
@@ -64,7 +63,7 @@ def compounds(
 
 def compound_details(
     driver: WebDriver, compound: int, option: int, url_dict: dict
-) -> (str, dict):
+) -> Tuple[str, dict]:
     current_page_driver = driver
     details_url = url_dict
 

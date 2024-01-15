@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -5,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 def selenium_get_table(
     driver: WebDriver,
-) -> ([[str]], [str], dict):
+) -> Tuple[List[List[str]], List, dict]:
     header = [
         "NUMBER",
     ]
@@ -13,7 +14,7 @@ def selenium_get_table(
     url_dict = {}
 
     col_titles = driver.find_elements(By.CLASS_NAME, "rz-column-title-content")
-    WebDriverWait(driver, timeout=2).until(lambda f : col_titles[0].is_displayed())
+    WebDriverWait(driver, timeout=2).until(lambda _ : col_titles[0].is_displayed())
 
     for i in range(len(col_titles)):
         title = col_titles[i].text
@@ -31,7 +32,7 @@ def selenium_get_table(
 
     elem_number = 0
 
-    for p in range(page_num):
+    for _ in range(page_num):
         rows = driver.find_elements(By.CLASS_NAME, "rz-data-row")
 
         for i in range(len(rows)):
@@ -63,18 +64,16 @@ def selenium_get_table(
             )
             paginator_next[0].click()
 
-    print("Success")
-
     return table, header, url_dict
 
 
-def selenium_get_summary(driver: WebDriver) -> (str, [str], dict):
+def selenium_get_summary(driver: WebDriver) -> Tuple[list, list, dict]:
     current_page_driver = driver
     onepage_summary_btn = current_page_driver.find_elements(
         By.XPATH,
         "//*[contains(@rel, 'noopener') and contains(@title, 'Click for one page')]",
     )[0]
-    WebDriverWait(driver, timeout=2).until(lambda f : onepage_summary_btn.is_displayed())
+    WebDriverWait(driver, timeout=2).until(lambda _ : onepage_summary_btn.is_displayed())
     onepage_summary_btn.click()
 
     cols = driver.find_elements(

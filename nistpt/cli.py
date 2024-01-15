@@ -8,7 +8,7 @@ from nistpt.srd20.menu import *
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--opt", help="printout the first arg")
+# parser.add_argument("--opt", help="printout the first arg")
 
 args = parser.parse_args()
 
@@ -21,7 +21,6 @@ def initialize_webdriver():
 
 
 def main():
-    print(args.opt)
     menu_controller(initialize_webdriver())
     return
 

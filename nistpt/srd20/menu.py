@@ -62,9 +62,9 @@ def compounds_menu(driver: WebDriver) -> None:
 
         match extend:
             case "q":
-                terminate_session(compounds_menu, driver)
+                terminate_session(compounds_menu(driver), driver)
             case "quit":
-                terminate_session(compounds_menu, driver)
+                terminate_session(compounds_menu(driver), driver)
             case _:
                 try:
                     if extend == "0":

@@ -1,6 +1,6 @@
 from selenium.webdriver.firefox.webdriver import WebDriver
 
-def terminate_session(callback_menu: None, driver: WebDriver) -> None:
+def terminate_session(callback_menu, driver: WebDriver) -> None:
     print("--\n")
     print("Are you sure you want to terminate your session?: (y[es]/n[o])\n")
 
@@ -22,5 +22,5 @@ def terminate_session(callback_menu: None, driver: WebDriver) -> None:
             callback_menu(driver)
         case _:
             print("Please choose an available option\n")
-            terminate_session(callback_menu(driver))
+            terminate_session(callback_menu(driver), driver)
     return
