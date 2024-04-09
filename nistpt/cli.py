@@ -6,9 +6,9 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from nistpt.srd20.menu import *
 
 
-parser = argparse.ArgumentParser()
-
-# parser.add_argument("--opt", help="printout the first arg")
+parser = argparse.ArgumentParser(
+    description="NIST scraper utility. Get info from NIST database - current coverage: SRD20"
+)
 
 args = parser.parse_args()
 
